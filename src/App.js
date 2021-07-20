@@ -26,17 +26,17 @@ const App = () => {
       .then((res) => {
         setData(res.data);
         console.log(res.data);
-      })
-      .then((res) =>
-        axios
-          .get(
-            "https://api.unsplash.com/search/photos?query=London&client_id=5aualamt2KC7W-6LD_lWJYCZazwNlUMrQ6-KkH3wo9Y"
-          )
-          .then((res) => {
-            console.log(res.data.results);
-            myRef.current.style.backgroundImage = `url(${res.data.results[0].urls.full})`;
-          })
-      );
+      });
+    setTimeout(() => {
+      axios
+        .get(
+          "https://api.unsplash.com/search/photos?query=London&client_id=5aualamt2KC7W-6LD_lWJYCZazwNlUMrQ6-KkH3wo9Y"
+        )
+        .then((res) => {
+          console.log(res.data.results);
+          myRef.current.style.backgroundImage = `url(${res.data.results[0].urls.full})`;
+        });
+    }, 200);
   }, []);
   const handleSearchCity = (e) => {
     console.log(e);
@@ -56,17 +56,17 @@ const App = () => {
           )
           .then((res) => {
             setData(res.data);
-          })
-          .then((res) =>
-            axios
-              .get(
-                `https://api.unsplash.com/search/photos?query=${filter}&client_id=5aualamt2KC7W-6LD_lWJYCZazwNlUMrQ6-KkH3wo9Y`
-              )
-              .then((res) => {
-                console.log(res.data.results);
-                myRef.current.style.backgroundImage = `url(${res.data.results[0].urls.full})`;
-              })
-          );
+          });
+        setTimeout(() => {
+          axios
+            .get(
+              `https://api.unsplash.com/search/photos?query=${filter}&client_id=5aualamt2KC7W-6LD_lWJYCZazwNlUMrQ6-KkH3wo9Y`
+            )
+            .then((res) => {
+              console.log(res.data.results);
+              myRef.current.style.backgroundImage = `url(${res.data.results[0].urls.full})`;
+            });
+        }, 200);
       }
     }
   };
