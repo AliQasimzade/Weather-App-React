@@ -1,4 +1,4 @@
-import React, { useState, useRef, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./index.css";
 import axios from "axios";
 import TextField from "@material-ui/core/TextField";
@@ -9,37 +9,59 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import Fab from "@material-ui/core/Fab";
 import SearchIcon from "@material-ui/icons/Search";
+import AlertBox from "./AlertBox";
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 const App = () => {
+  const [open, setOpen] = useState(false);
   const [filter, setFilter] = useState("");
   const [data, setData] = useState(null);
   const [isFalse, setIsFalse] = useState(false);
-  const myRef = useRef(null);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const handleChangeCityWeather = (e) => {
     setFilter(e.target.value);
   };
-  useLayoutEffect(() => {
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
+  useEffect(() => {
     axios
       .get(
         "https://api.openweathermap.org/data/2.5/weather?q=London&appid=36b30956cad8e4c85834f1a46cb61dec"
       )
       .then((res) => {
         setData(res.data);
-        console.log(res.data);
+        setOpen(false)
+      })
+      .catch((err) => {
+        setOpen(true)
+        handleClick()
       });
-    setTimeout(() => {
-      axios
-        .get(
-          "https://api.unsplash.com/search/photos?query=London&client_id=5aualamt2KC7W-6LD_lWJYCZazwNlUMrQ6-KkH3wo9Y"
-        )
-        .then((res) => {
-          console.log(res.data.results);
-          myRef.current.style.backgroundImage = `url(${res.data.results[0].urls.full})`;
-        });
-    }, 200);
   }, []);
   const handleSearchCity = (e) => {
-    console.log(e);
     e.stopPropagation();
     if (filter === "") {
       setIsFalse(true);
@@ -55,24 +77,25 @@ const App = () => {
             `https://api.openweathermap.org/data/2.5/weather?q=${filter}&appid=36b30956cad8e4c85834f1a46cb61dec`
           )
           .then((res) => {
-            setData(res.data);
-          });
-        setTimeout(() => {
-          axios
-            .get(
-              `https://api.unsplash.com/search/photos?query=${filter}&client_id=5aualamt2KC7W-6LD_lWJYCZazwNlUMrQ6-KkH3wo9Y`
-            )
-            .then((res) => {
-              console.log(res.data.results);
-              myRef.current.style.backgroundImage = `url(${res.data.results[0].urls.full})`;
-            });
-        }, 200);
+            setData(res.data)
+            setOpen(false)
+          }
+           
+          )
+          .catch(err => setOpen(true))
       }
     }
   };
 
   return (
-    <div className="App" ref={myRef}>
+    <div
+      className="App"
+      style={{
+        backgroundImage:
+          "url(https://img.freepik.com/free-photo/white-cloud-blue-sky-sea_74190-4488.jpg?w=2000)",
+      }}
+    >
+      {open && <AlertBox open={open} handleClose={handleClose} action={action}/>}
       <div className="container">
         <div className="search">
           <TextField

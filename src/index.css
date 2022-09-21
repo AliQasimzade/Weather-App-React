@@ -37,12 +37,20 @@ h2 {
   border-radius: 8px !important;
 }
 .MuiOutlinedInput-input {
-  color: #fff !important;
+  color:#000 !important;
+  background: #e0e0e0 !important;
 }
 
+.MuiSnackbarContent-root{
+  background-color: #54a0ff !important;
+}
+.MuiInputBase-formControl{
+  overflow: hidden;
+}
 .container {
+  margin: 0 15px 0 15px;
   align-items: center;
-  background-color: #000000d0;
+  background-color: #54a0ff;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
